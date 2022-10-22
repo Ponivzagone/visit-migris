@@ -89,6 +89,7 @@ def send_email(to_: str, from_: str, subject: str, text: str) -> None:
 
 
 if __name__ == '__main__':
+    last_respons = ''
 
     parser = argparse.ArgumentParser(description='Migris book a visit time')
     parser.add_argument('--to_email', help='Email to', type=str, required=True)
@@ -100,7 +101,8 @@ if __name__ == '__main__':
     logger.info('Start script with parameters - {}'.format(args))
     while True:
         respons = get_migris_book_visit_time(args.day)
-        if respons:
+        if respons and respons != last_respons:
+            last_respons = respons
             send_email(args.to_email, args.from_email, 'Migris book a visit', respons)
         logger.info('Sleep - {} sec.'.format(args.sleep))
         time.sleep(args.sleep)
